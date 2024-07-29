@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Check;
+use App\Models\Transaction;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\UserData;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +16,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        DB::statement("SET foreign_key_checks=0");
+
+        User::truncate();
+        UserData::truncate();
+        Transaction::truncate();
+        Check::truncate();
+
+        DB::statement("SET foreign_key_checks=1");
+
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@admin.com',
+        ]);
+
+        $this->call([
+            UserTableSeeder::class,
+            TransactionsTableSeeder::class,
+            ChecksTableSeeder::class,
         ]);
     }
 }
