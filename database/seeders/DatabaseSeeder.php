@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Check;
 use App\Models\Transaction;
 use App\Models\User;
-use App\Models\UserData;
+use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         DB::statement("SET foreign_key_checks=0");
 
         User::truncate();
-        UserData::truncate();
+        Account::truncate();
         Transaction::truncate();
         Check::truncate();
 
@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            AccountTableSeeder::class,
             UserTableSeeder::class,
             TransactionsTableSeeder::class,
             ChecksTableSeeder::class,

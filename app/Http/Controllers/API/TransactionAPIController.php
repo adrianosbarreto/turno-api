@@ -7,7 +7,7 @@ use App\Http\Requests\CreateTransactionAPIRequest;
 use App\Http\Requests\UpdateTransactionAPIRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
-use App\Repositories\TransactionRepository;
+use App\Repo\TransactionRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

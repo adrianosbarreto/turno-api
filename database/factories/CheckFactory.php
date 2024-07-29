@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Entities\Account;
 use App\Models\Check;
+use App\Models\Income;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Transaction;
@@ -23,17 +25,19 @@ class CheckFactory extends Factory
      */
     public function definition()
     {
-        $transaction = Transaction::inRandomOrder()->first();
+        $transaction = Income::inRandomOrder()->first();
+
+        $account = Account::inRandomOrder()->first();
 
         if (!$transaction) {
-            $transaction = Transaction::factory()->create();
+            $transaction = Income::factory()->create();
         }
 
         $status = $this->faker->randomElement(['pending', 'reject', 'accept']);
 
         return [
-            'transaction_id' => $status == 'accept' ? $transaction->id : null,
-            'user_id' => $transaction->user_id,
+            'account_id' => $account->id,
+            'income_id' => $status == 'accept' ? $transaction->id : null,
             'picture' => $this->faker->imageUrl(640, 480, 'business', true, 'Faker'),
             'amount' => $this->faker->randomFloat(2, 0, 10000),
             'description' => $this->faker->text($this->faker->numberBetween(5, 4096)),

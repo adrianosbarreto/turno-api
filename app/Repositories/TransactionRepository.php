@@ -2,25 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Models\Transaction;
-use App\Repositories\BaseRepository;
+use Prettus\Repository\Contracts\RepositoryInterface;
 
-class TransactionRepository extends BaseRepository
+/**
+ * Interface TransactionRepository.
+ *
+ * @package namespace App\Repositories;
+ */
+interface TransactionRepository extends RepositoryInterface
 {
-    protected $fieldSearchable = [
-        'type',
-        'amount',
-        'date',
-        'description'
-    ];
+    public function getYearMonthOfAllTransactions(int $month, int $year, int $accountId): Collection;
 
-    public function getFieldsSearchable(): array
-    {
-        return $this->fieldSearchable;
-    }
-
-    public function model(): string
-    {
-        return Transaction::class;
-    }
+    public function datesToFilter(int $accountId) : Collection;
 }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-interface CatServiceInterface
+interface TransactionServicesInterface
 {
     //
 }

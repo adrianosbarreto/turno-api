@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repo;
 
-use App\Models\UserData;
-use App\Repositories\BaseRepository;
+use App\Models\Account;
+use App\Repo\BaseRepository;
 
 class UserDataRepository extends BaseRepository
 {
@@ -20,6 +20,6 @@ class UserDataRepository extends BaseRepository
 
     public function model(): string
     {
-        return UserData::class;
+        return Account::class;
     }
 }

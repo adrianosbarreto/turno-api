@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Check extends Model
 {
-     use SoftDeletes;    use HasFactory;    public $table = 'checks';
+     use SoftDeletes;
+     use HasFactory;
+
+     public $table = 'checks';
 
     public $fillable = [
-        'transaction_id',
+        'income_id',
         'picture',
         'amount',
         'description',
@@ -31,8 +34,8 @@ class Check extends Model
         'status' => 'required'
     ];
 
-    public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function income(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Transaction::class, 'transaction_id', 'id');
+        return $this->belongsTo(Income::class, 'income_id', 'id');
     }
 }

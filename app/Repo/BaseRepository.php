@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repo;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;

@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('check_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('type');
+            $table->enum('type', ['accepted', 'rejected']);
             $table->timestamps();
+            $table->softDeletes();
 
             // Foreign key constraints (if applicable)
             $table->foreign('check_id')->references('id')->on('checks')->onDelete('cascade');

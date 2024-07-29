@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_datas', function (Blueprint $table) {
-            $table->id('id');
+        Schema::create('accounts', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained();
             $table->enum('type', ['customer', 'admin']);
-            $table->string('account');
+            $table->string('account_number');
             $table->decimal('current_balance', 15, 2);
             $table->string('user_name');
             $table->timestamps();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('user_datas');
+        Schema::drop('accounts');
     }
 };

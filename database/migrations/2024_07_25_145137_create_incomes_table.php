@@ -12,12 +12,13 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('cats', function(Blueprint $table) {
-            $table->increments('id');
-			$table->title('string')->string();
-			$table->content('text')->text();
+		Schema::create('incomes', function(Blueprint $table) {
+            $table->id();
+            $table->decimal('amount', 15,2);
+            $table->text('description');
 
             $table->timestamps();
+            $table->softDeletes();
 		});
 	}
 
@@ -28,6 +29,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('cats');
+		Schema::drop('incomes');
 	}
 };

@@ -14,16 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('checks', function (Blueprint $table) {
-            $table->id('id');
-            $table->foreignId('user_id')->constrained();
+            $table->id();
 
-            $table->unsignedBigInteger('transaction_id')->nullable();
-            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
-
-            $table->string('picture');
             $table->decimal('amount', 15,2);
             $table->text('description');
             $table->enum('status', ['pending','reject', 'accept']);
+            $table->string('picture');
+
+            $table->foreignId('account_id')->constrained();
+
+            $table->unsignedBigInteger('income_id')->nullable();;
+            $table->foreign('income_id')->references('id')->on('incomes');
+
             $table->timestamps();
             $table->softDeletes();
         });

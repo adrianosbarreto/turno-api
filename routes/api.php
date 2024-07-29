@@ -23,3 +23,10 @@ Route::resource('transactions', App\Http\Controllers\API\TransactionAPIControlle
 
 Route::resource('checks', App\Http\Controllers\API\CheckAPIController::class)
     ->except(['create', 'edit']);
+
+Route::get('buckets', function(){
+
+    $heroImage = \Illuminate\Support\Facades\Storage::get('teste.png');
+    $uploadedPath = \Illuminate\Support\Facades\Storage::disk('s3')->put('teste12.png', $heroImage);
+    return \Illuminate\Support\Facades\Storage::disk('s3')->url($uploadedPath);
+});

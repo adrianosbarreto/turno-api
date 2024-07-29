@@ -46,7 +46,7 @@ class User extends Authenticatable
 
     public function userData() : \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(UserData::class);
+        return $this->hasOne(Account::class);
     }
 
     public function transactions() : \Illuminate\Database\Eloquent\Relations\HasMany

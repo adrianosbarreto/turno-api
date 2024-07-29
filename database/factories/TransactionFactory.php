@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
+use App\Models\Check;
+use App\Models\Expense;
+use App\Models\Income;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,20 +27,20 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
+        $account = Account::inRandomOrder()->first();
 
+        $type = $this->faker->randomElement(['income', 'expense']);
 
-        $user = User::inRandomOrder()->first();
-
-        if (!$user) {
-            $user = User::factory()->create();
+        if ($type == 'income') {
+            $transactable = Income::factory()->create();
+        } else {
+            $transactable = Expense::factory()->create();
         }
 
         return [
-            'user_id' => $user->id,
-            'type' => $this->faker->randomElement(['expense', 'income']),
-            'amount' => $this->faker->randomFloat(2, 0, 10000),
-            'date' => $this->faker->date('Y-m-d'),
-            'description' => $this->faker->text($this->faker->numberBetween(5, 4096)),
+            'transactable_type' => $type,
+            'transactable_id' => $transactable->id,
+            'account_id' => $account->id,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

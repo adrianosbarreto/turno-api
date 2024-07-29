@@ -14,12 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id('id');
-            $table->foreignId('user_id')->constrained();
-            $table->enum('type', ['expense', 'income']);
-            $table->decimal('amount', 15, 2);
-            $table->date('date');
-            $table->text('description');
+            $table->id();
+            $table->morphs('transactable');
+            $table->foreignId('account_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

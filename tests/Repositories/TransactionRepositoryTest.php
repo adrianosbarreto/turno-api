@@ -3,7 +3,7 @@
 namespace Tests\Repositories;
 
 use App\Models\Transaction;
-use App\Repositories\TransactionRepository;
+use App\Repo\TransactionRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\CreateCheckAPIRequest;
 use App\Http\Requests\UpdateCheckAPIRequest;
 use App\Models\Check;
-use App\Repositories\CheckRepository;
+use App\Repo\CheckRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

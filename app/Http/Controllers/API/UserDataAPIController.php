@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserDataAPIRequest;
 use App\Http\Requests\UpdateUserDataAPIRequest;
 use App\Http\Resources\UserDataResource;
-use App\Models\UserData;
-use App\Repositories\UserDataRepository;
+use App\Models\Account;
+use App\Repo\UserDataRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -58,7 +58,7 @@ class UserDataAPIController extends Controller
      */
     public function show($id): JsonResponse
     {
-        /** @var UserData $userData */
+        /** @var Account $userData */
         $userData = $this->userDataRepository->find($id)->with('user');
 
         if (empty($userData)) {
@@ -76,7 +76,7 @@ class UserDataAPIController extends Controller
     {
         $input = $request->all();
 
-        /** @var UserData $userData */
+        /** @var Account $userData */
         $userData = $this->userDataRepository->find($id);
 
         if (empty($userData)) {
@@ -96,7 +96,7 @@ class UserDataAPIController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        /** @var UserData $userData */
+        /** @var Account $userData */
         $userData = $this->userDataRepository->find($id);
 
         if (empty($userData)) {

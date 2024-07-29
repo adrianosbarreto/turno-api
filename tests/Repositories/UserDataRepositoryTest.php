@@ -2,8 +2,8 @@
 
 namespace Tests\Repositories;
 
-use App\Models\UserData;
-use App\Repositories\UserDataRepository;
+use App\Models\Account;
+use App\Repo\UserDataRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
@@ -25,14 +25,14 @@ class UserDataRepositoryTest extends TestCase
      */
     public function test_create_user_data()
     {
-        $userData = UserData::factory()->make()->toArray();
+        $userData = Account::factory()->make()->toArray();
 
         $createdUserData = $this->userDataRepo->create($userData);
 
         $createdUserData = $createdUserData->toArray();
         $this->assertArrayHasKey('id', $createdUserData);
         $this->assertNotNull($createdUserData['id'], 'Created UserData must have id specified');
-        $this->assertNotNull(UserData::find($createdUserData['id']), 'UserData with given id must be in DB');
+        $this->assertNotNull(Account::find($createdUserData['id']), 'UserData with given id must be in DB');
         $this->assertModelData($userData, $createdUserData);
     }
 
@@ -41,7 +41,7 @@ class UserDataRepositoryTest extends TestCase
      */
     public function test_read_user_data()
     {
-        $userData = UserData::factory()->create();
+        $userData = Account::factory()->create();
 
         $dbUserData = $this->userDataRepo->find($userData->id);
 
@@ -54,8 +54,8 @@ class UserDataRepositoryTest extends TestCase
      */
     public function test_update_user_data()
     {
-        $userData = UserData::factory()->create();
-        $fakeUserData = UserData::factory()->make()->toArray();
+        $userData = Account::factory()->create();
+        $fakeUserData = Account::factory()->make()->toArray();
 
         $updatedUserData = $this->userDataRepo->update($fakeUserData, $userData->id);
 
@@ -69,11 +69,11 @@ class UserDataRepositoryTest extends TestCase
      */
     public function test_delete_user_data()
     {
-        $userData = UserData::factory()->create();
+        $userData = Account::factory()->create();
 
         $resp = $this->userDataRepo->delete($userData->id);
 
         $this->assertTrue($resp);
-        $this->assertNull(UserData::find($userData->id), 'UserData should not exist in DB');
+        $this->assertNull(Account::find($userData->id), 'UserData should not exist in DB');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\UserData;
+use App\Models\Account;
 
 class UpdateUserDataAPIRequest extends BaseAPIRequest
 {
@@ -23,6 +23,6 @@ class UpdateUserDataAPIRequest extends BaseAPIRequest
      */
     public function rules()
     {
-        return UserData::$rules;
+        return Account::$rules;
     }
 }
