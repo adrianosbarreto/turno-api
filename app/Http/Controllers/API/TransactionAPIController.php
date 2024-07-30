@@ -31,9 +31,27 @@ class TransactionAPIController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-//        $input = $request->all();
-//        var_dump($input);
+
         $transactions = $this->transactionService->transactionsByAccount(4);
+
+        return $this->sendResponse( new TransactionCollection($transactions), 'Transactions retrieved successfully');
+    }
+
+    public function filter(Request $request): JsonResponse
+    {
+        $request->validate([
+            'type' => 'nullable|in:income,expense',
+            'month' => 'nullable|integer',
+            'year' => 'nullable|integer'
+        ]);
+
+        $transactions = $this->transactionService->transactionsByAccountAndTypeOrMonthOrYear(
+            4,
+            $request->type,
+            $request->month,
+            $request->year
+        );
+
 
         return $this->sendResponse( new TransactionCollection($transactions), 'Transactions retrieved successfully');
     }

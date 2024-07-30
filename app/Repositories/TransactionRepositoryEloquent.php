@@ -33,4 +33,22 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+    function transactionsByAccountAndTypeOrMonthOrYear($account_id, $type, $month, $year){
+        return $this->scopeQuery(
+            function ($query) use ($account_id, $type, $month, $year) {
+                return $query->where('account_id', $account_id)
+                    ->when($type, function ($query) use ($type) {
+                        $query->where('transactable_type', $type);
+                    })
+                    ->when($month, function ($query) use ($month) {
+                        return $query->whereMonth('created_at', $month);
+                    })
+                    ->when($year, function ($query) use ($year) {
+                        return $query->whereYear('created_at', $year);
+                    });
+            }
+        )->get();
+
+    }
 }

@@ -2,31 +2,28 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\CheckAPIController;
+use App\Http\Controllers\API\TransactionAPIController;
 
 //
 //Route::post('login', [UserController::class, 'login']);
 //Route::post('register', [UserController::class, 'register']);
 
-Route::get('teste', function () {
-    return response()->json(['message' => 'Hello World!']);
-});
 //
 //Route::middleware('auth:api')->group(function () {
 //    Route::get('user', [UserController::class, 'details']);
 //});
 
-Route::resource('user-datas', App\Http\Controllers\API\UserDataAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('transactions', App\Http\Controllers\API\TransactionAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('checks', App\Http\Controllers\API\CheckAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::get('buckets', function(){
-
-    $heroImage = \Illuminate\Support\Facades\Storage::get('teste.png');
-    $uploadedPath = \Illuminate\Support\Facades\Storage::disk('s3')->put('teste12.png', $heroImage);
-    return \Illuminate\Support\Facades\Storage::disk('s3')->url($uploadedPath);
+Route::prefix('checks')->group(function () {
+    Route::post('/', [CheckAPIController::class, 'store']);
+    Route::get('/', [CheckAPIController::class, 'index']);
+    Route::post('/status-filter', [CheckAPIController::class, 'filter']);
+    Route::post('/month-year-filter', [CheckAPIController::class, 'index']);
 });
+
+Route::prefix('transactions')->group(function () {
+    Route::post('/', [TransactionAPIController::class, 'store']);
+    Route::get('/', [TransactionAPIController::class, 'index']);
+    Route::post('/type-filter', [TransactionAPIController::class, 'filter']);
+});
+

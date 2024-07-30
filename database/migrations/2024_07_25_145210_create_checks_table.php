@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->decimal('amount', 15,2);
             $table->text('description');
-            $table->enum('status', ['pending','reject', 'accept']);
+            $table->enum('status', ['pending','reject', 'accept'])->default('pending');
             $table->string('picture');
 
             $table->foreignId('account_id')->constrained();

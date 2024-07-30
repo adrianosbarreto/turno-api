@@ -64,6 +64,12 @@ class TransactionService implements TransactionServicesInterface
         return $this->transactionRepository->with(['transactable'])->findByField('account_id', $account_id);
     }
 
+    public function transactionsByAccountAndTypeOrMonthOrYear($account_id, $type, $month, $year)
+    {
+        return $this->transactionRepository->transactionsByAccountAndTypeOrMonthOrYear($account_id, $type, $month, $year);
+    }
+
+
     public function createTransaction($data)
     {
         return $data;

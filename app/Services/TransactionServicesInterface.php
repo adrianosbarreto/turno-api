@@ -8,6 +8,6 @@ interface TransactionServicesInterface
 
     public function addIncome($data);
 
-    public function transactionsByAccount($account_id);
+    public function transactionsByAccountAndTypeOrMonthOrYear($account_id, $type, $month, $year);
 
 }
