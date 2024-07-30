@@ -5,9 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTransactionAPIRequest;
 use App\Http\Requests\UpdateTransactionAPIRequest;
+use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
-use App\Repo\TransactionRepository;
+use App\Services\TransactionServicesInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -16,12 +17,12 @@ use Illuminate\Http\Request;
  */
 class TransactionAPIController extends Controller
 {
-    /** @var  TransactionRepository */
-    private $transactionRepository;
+    /** @var  TransactionServicesInterface */
+    private TransactionServicesInterface $transactionService;
 
-    public function __construct(TransactionRepository $transactionRepo)
+    public function __construct(TransactionServicesInterface $transactionService)
     {
-        $this->transactionRepository = $transactionRepo;
+        $this->transactionService = $transactionService;
     }
 
     /**
@@ -30,13 +31,11 @@ class TransactionAPIController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $transactions = $this->transactionRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+//        $input = $request->all();
+//        var_dump($input);
+        $transactions = $this->transactionService->transactionsByAccount(4);
 
-        return $this->sendResponse(TransactionResource::collection($transactions), 'Transactions retrieved successfully');
+        return $this->sendResponse( new TransactionCollection($transactions), 'Transactions retrieved successfully');
     }
 
     /**
@@ -46,8 +45,13 @@ class TransactionAPIController extends Controller
     public function store(CreateTransactionAPIRequest $request): JsonResponse
     {
         $input = $request->all();
+        $type = $input['type'];
 
-        $transaction = $this->transactionRepository->create($input);
+        if ($type === 'income') {
+            $transaction = $this->transactionService->addIncome($input);
+        } else {
+            $transaction = $this->transactionService->addPurchase($input);
+        }
 
         return $this->sendResponse(new TransactionResource($transaction), 'Transaction saved successfully');
     }
@@ -59,7 +63,7 @@ class TransactionAPIController extends Controller
     public function show($id): JsonResponse
     {
         /** @var Transaction $transaction */
-        $transaction = $this->transactionRepository->find($id);
+        $transaction = $this->transactionService->find($id);
 
         if (empty($transaction)) {
             return $this->sendError('Transaction not found');
@@ -76,14 +80,13 @@ class TransactionAPIController extends Controller
     {
         $input = $request->all();
 
-        /** @var Transaction $transaction */
-        $transaction = $this->transactionRepository->find($id);
+        $transaction = $this->transactionService->find($id);
 
         if (empty($transaction)) {
             return $this->sendError('Transaction not found');
         }
 
-        $transaction = $this->transactionRepository->update($input, $id);
+        $transaction = $this->transactionService->update($input, $id);
 
         return $this->sendResponse(new TransactionResource($transaction), 'Transaction updated successfully');
     }
@@ -97,7 +100,7 @@ class TransactionAPIController extends Controller
     public function destroy($id): JsonResponse
     {
         /** @var Transaction $transaction */
-        $transaction = $this->transactionRepository->find($id);
+        $transaction = $this->transactionService->find($id);
 
         if (empty($transaction)) {
             return $this->sendError('Transaction not found');

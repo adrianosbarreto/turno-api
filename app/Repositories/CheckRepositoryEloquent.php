@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Criteria\AccountByUserLoggedCriteriaCriteria;
+use Illuminate\Support\Collection;
 use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\CheckRepository;
-use App\Entities\Check;
+use App\Models\Check;
 use App\Validators\CheckValidator;
 
 /**
@@ -25,20 +25,20 @@ class CheckRepositoryEloquent extends BaseRepository implements CheckRepository
         return Check::class;
     }
 
-
-
     /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        $this->pushCriteria(new AccountByUserLoggedCriteriaCriteria());
     }
 
-    public function getChecksInMonthAndYearByAccountWithTransaction(int $month, int $year, int $accountId): Collection
+    public function getChecksByMonthYear(int $accountId, int $month, int $year): Collection
     {
-        return $this->with(['transactable:id,amount,description'])->scopeQuery(function ($query) use ($month, $year) {
+        return $this->scopeQuery(function ($query) use ($month, $year) {
             return $query->whereMonth('created_at', $month)->whereYear('created_at', $year);
-        })->orderBy('created_at', $direction = 'desc')->findByField('account_id', $accountId, ['created_at', 'transactable_type', 'transactable_id']);
+        })->orderBy('created_at', $direction = 'desc')->all();
     }
+
+
 }

@@ -4,8 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\IncomeRepository;
-use App\Entities\Income;
+use \App\Models\Income;
 use App\Validators\IncomeValidator;
 
 /**
@@ -26,23 +25,11 @@ class IncomeRepositoryEloquent extends BaseRepository implements IncomeRepositor
     }
 
     /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-
-        return IncomeValidator::class;
-    }
-
-
-    /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }

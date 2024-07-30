@@ -9,7 +9,7 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  *
  * @package namespace App\Repositories;
  */
-interface IncomeRepository extends RepositoryInterface
+interface ExpenseRepository extends RepositoryInterface
 {
     //
 }

@@ -2,17 +2,17 @@
 
 namespace App\Repositories;
 
-use App\Models\Transaction;
+use App\Models\Expense;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 
 
 /**
- * Class TransactionRepositoryEloquent.
+ * Class IncomeRepositoryEloquent.
  *
  * @package namespace App\Repositories;
  */
-class TransactionRepositoryEloquent extends BaseRepository implements TransactionRepository
+class ExpenseRepositoryEloquent extends BaseRepository implements ExpenseRepository
 {
     /**
      * Specify Model class name
@@ -21,10 +21,8 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
      */
     public function model()
     {
-        return Transaction::class;
+        return Expense::class;
     }
-
-
 
     /**
      * Boot up the repository, pushing criteria
@@ -33,4 +31,5 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
 }

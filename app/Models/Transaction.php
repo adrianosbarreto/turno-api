@@ -6,33 +6,38 @@ use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Transaction extends Model
 {
-     use SoftDeletes;    use HasFactory;    public $table = 'transactions';
+    use SoftDeletes;
+    use HasFactory;
+
+    public $table = 'transactions';
 
     public $fillable = [
-        'user_id',
-        'type',
-        'amount',
-        'date',
-        'description'
+        'account_id',
+        'transactable_id',
+        'transactable_type'
     ];
 
     protected $casts = [
+        'account_id' => 'integer',
         'type' => 'string',
         'amount' => 'decimal:2',
-        'date' => 'date',
         'description' => 'string'
     ];
 
     public static array $rules = [
-        'user_id' => 'required|min:1',
+        'account_id' => 'required|min:1|exists:accounts,id',
         'type' => 'required',
         'amount' => 'required|numeric',
-        'date' => 'required|date',
-        'description' => 'nullable'
+        'description' => 'required|nullable'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
+    }
+
+    public function transactable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo();
     }
 }

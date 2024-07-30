@@ -13,6 +13,7 @@ class Check extends Model
 
     public $fillable = [
         'income_id',
+        'account_id',
         'picture',
         'amount',
         'description',
@@ -23,14 +24,16 @@ class Check extends Model
         'picture' => 'string',
         'amount' => 'decimal:2',
         'description' => 'string',
-        'status' => 'string'
+        'status' => 'string',
+        'account_id' => 'integer',
     ];
 
     public static array $rules = [
-        'transaction_id' => 'required|min:1',
-        'picture' => 'nullable',
+        'income_id' => 'nullable|min:1',
+        'account_id' => 'required|exists:accounts,id',
+        'picture' => 'required|nullable',
         'amount' => 'required|numeric',
-        'description' => 'nullable',
+        'description' => 'required|min:3|nullable',
         'status' => 'required'
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\TransactionRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -20,6 +21,9 @@ class RepositoryServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->bind(\App\Repositories\IncomeRepository::class, \App\Repositories\IncomeRepositoryEloquent::class);
-        //:end-bindings:
+        $this->app->bind(\App\Repositories\CheckRepository::class, \App\Repositories\CheckRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ExpenseRepository::class, \App\Repositories\ExpenseRepositoryEloquent::class);
+        $this->app->bind(TransactionRepository::class, \App\Repositories\TransactionRepositoryEloquent::class);
     }
+
 }

@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
+
 interface CheckServicesInterface
 {
 
-    public function filterByMonthYear($account_id, $month, $year);
+    public function filterByMonthYear($account_id, $month, $year) : Collection;
 
     public function addCheck($data);
 
