@@ -13,6 +13,7 @@ class Account extends Model
      public $table = 'accounts';
 
     public $fillable = [
+        'id',
         'user_id',
         'type',
         'account_number',
@@ -22,7 +23,7 @@ class Account extends Model
 
     protected $casts = [
         'type' => 'string',
-        'account_number_number' => 'string',
+        'account_number' => 'string',
         'current_balance' => 'decimal:2',
         'user_name' => 'string'
     ];
@@ -30,7 +31,6 @@ class Account extends Model
     public static array $rules = [
         'user_id' => 'required|min:1',
         'type' => 'required',
-        'account_number_number' => 'required',
         'current_balance' => 'required|numeric',
         'user_name' => 'required'
     ];

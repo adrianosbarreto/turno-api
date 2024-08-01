@@ -23,11 +23,8 @@ class AccountFactory extends Factory
      */
     public function definition()
     {
-
-        $user = User::factory()->create();
-
         return [
-            'user_id' => $user->id,
+            'user_id' => User::factory()->create(),
             'type' => $this->faker->randomElement(['customer', 'admin']),
             'account_number' => $this->faker->regexify('[0-9]{10}'),
             'current_balance' => $this->faker->randomFloat(2, 0, 10000),

@@ -48,7 +48,7 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
                         return $query->whereYear('created_at', $year);
                     });
             }
-        )->get();
+        )->orderBy('created_at', 'DESC')->get();
 
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Check;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 

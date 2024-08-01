@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\CreateCheckAPIRequest;
 use App\Http\Requests\UpdateCheckAPIRequest;
 use App\Http\Resources\CheckResource;
 use App\Models\Check;
-use App\Repo\CheckRepositoryInterface;
-use App\Repositories\CheckRepository;
 use App\Services\CheckService;
 use App\Services\CheckServicesInterface;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +16,7 @@ use Illuminate\Http\Request;
  */
 class CheckAPIController extends Controller
 {
-    /** @var  CheckRepository */
+    /** @var  CheckService */
     private $checkService;
 
     public function __construct(CheckServicesInterface $checkService)
@@ -39,6 +36,7 @@ class CheckAPIController extends Controller
 
         $checks = $this->checkService->filterByMonthYear($account_id, $month, $year);
 
+
         return $this->sendResponse(new CheckResource($checks), 'Checks retrieved successfully');
     }
 
@@ -48,11 +46,15 @@ class CheckAPIController extends Controller
      */
     public function store(\App\Http\Requests\CreateCheckAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
+        $input = $request->except('picture');
+
+        $image = $this->checkService->storeImageCheck($request->input('picture'));
+
+        $input['picture'] = $image;
 
         $check = $this->checkService->addCheck($input);
 
-        return $this->sendResponse($check, 'Check saved successfully');
+        return $this->sendResponse([$check, ], 'Check saved successfully');
     }
 
     /**
@@ -109,27 +111,5 @@ class CheckAPIController extends Controller
         $check->delete();
 
         return $this->sendSuccess('Check deleted successfully');
-    }
-
-    public function filterByStatus(Request $request): JsonResponse
-    {
-        $checks = $this->checkService->filter(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
-
-        return $this->sendResponse($checks, 'Checks retrieved successfully');
-    }
-
-    public function monthYearFilter(Request $request): JsonResponse
-    {
-        $checks = $this->checkService->filter(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
-
-        return $this->sendResponse($checks, 'Checks retrieved successfully');
     }
 }

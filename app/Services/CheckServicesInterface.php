@@ -15,5 +15,7 @@ interface CheckServicesInterface
 
     public function rejectCheck($id);
 
-    public function getCheck($id);
+    public function getCheckById($id);
+
+    public function storeImageCheck($image);
 }

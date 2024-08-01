@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Entities\Account;
+use App\Models\Account;
 use App\Models\Check;
 use App\Models\Income;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Transaction;
 
 class CheckFactory extends Factory
 {
@@ -33,6 +32,10 @@ class CheckFactory extends Factory
             $transaction = Income::factory()->create();
         }
 
+        $currentYear = date('Y');
+        $startDate = "$currentYear-01-01 00:00:00";
+        $endDate = "$currentYear-07-31 23:59:59";
+
         $status = $this->faker->randomElement(['pending', 'reject', 'accept']);
 
         return [
@@ -42,7 +45,7 @@ class CheckFactory extends Factory
             'amount' => $this->faker->randomFloat(2, 0, 10000),
             'description' => $this->faker->text($this->faker->numberBetween(5, 4096)),
             'status' => $status,
-            'created_at' => $this->faker->date('Y-m-d H:i:s'),
+            'created_at' => $this->faker->dateTimeBetween($startDate, $endDate)->format('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];
     }

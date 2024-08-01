@@ -24,9 +24,14 @@ class IncomeFactory extends Factory
      */
     public function definition(): array
     {
+        $currentYear = date('Y');
+        $startDate = "$currentYear-01-01 00:00:00";
+        $endDate = "$currentYear-07-31 23:59:59";
+
         return [
             'amount' => $this->faker->randomFloat(2, 0, 10000),
             'description' => $this->faker->sentence(),
+            'created_at' => $this->faker->dateTimeBetween($startDate, $endDate)->format('Y-m-d H:i:s'),
         ];
     }
 }

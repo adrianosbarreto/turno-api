@@ -11,5 +11,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface AccountRepository extends RepositoryInterface
 {
-    //
+    public function getAccountByAccountId($account_id);
+
+    public function createAccount($data);
+
+    public function accountByUserId($user_id);
 }

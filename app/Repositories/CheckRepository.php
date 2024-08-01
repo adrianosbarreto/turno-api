@@ -11,5 +11,10 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface CheckRepository extends RepositoryInterface
 {
-    //
+    public function getChecksByMonthYear(int $accountId, int $month, int $year);
+
+    public function getCheckByStatus($status, $month, $year);
+
+    public function getCheckById($id);
+
 }

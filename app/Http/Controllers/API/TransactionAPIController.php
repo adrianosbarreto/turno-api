@@ -62,16 +62,24 @@ class TransactionAPIController extends Controller
      */
     public function store(CreateTransactionAPIRequest $request): JsonResponse
     {
+
         $input = $request->all();
         $type = $input['type'];
 
-        if ($type === 'income') {
-            $transaction = $this->transactionService->addIncome($input);
-        } else {
-            $transaction = $this->transactionService->addPurchase($input);
-        }
+        try {
+            if ($type === 'income') {
+                $transaction = $this->transactionService->addIncome($input);
+            } elseif ($type === 'expense') {
+                $transaction = $this->transactionService->addPurchase($input);
+            } else {
+                return $this->sendError('Invalid transaction type', 400);
+            }
 
-        return $this->sendResponse(new TransactionResource($transaction), 'Transaction saved successfully');
+            return $this->sendResponse(new TransactionResource($transaction), 'Transaction saved successfully');
+        } catch (\Exception $e) {
+
+            return $this->sendError('Failed to process the transaction. Please try again later.', 500);
+        }
     }
 
     /**

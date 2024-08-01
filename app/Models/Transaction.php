@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Rules\SufficientBalance;
 use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Transaction extends Model
@@ -22,13 +23,6 @@ class Transaction extends Model
         'type' => 'string',
         'amount' => 'decimal:2',
         'description' => 'string'
-    ];
-
-    public static array $rules = [
-        'account_id' => 'required|min:1|exists:accounts,id',
-        'type' => 'required',
-        'amount' => 'required|numeric',
-        'description' => 'required|nullable'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

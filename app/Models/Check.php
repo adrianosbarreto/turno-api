@@ -41,4 +41,10 @@ class Check extends Model
     {
         return $this->belongsTo(Income::class, 'income_id', 'id');
     }
+
+    public function account(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account_id', 'id');
+    }
+
 }

@@ -4,8 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\AccountRepository;
-use App\Entities\Account;
+use \App\Models\Account;
 use App\Validators\AccountValidator;
 
 /**
@@ -25,8 +24,6 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
         return Account::class;
     }
 
-    
-
     /**
      * Boot up the repository, pushing criteria
      */
@@ -34,5 +31,17 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    public function getAccountByAccountId($account_id){
+        return $this->find($account_id);
+    }
+
+    public function createAccount($data){
+        return $this->create($data);
+    }
+
+    public function accountByUserId($user_id){
+
+        return $this->findByField('user_id', $user_id, ['id', 'user_id', 'type', 'account_number', 'current_balance', 'user_name'])->first();
+    }
 }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Account;
-use App\Models\Check;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Transaction;
@@ -37,11 +36,15 @@ class TransactionFactory extends Factory
             $transactable = Expense::factory()->create();
         }
 
+        $currentYear = date('Y');
+        $startDate = "$currentYear-01-01 00:00:00";
+        $endDate = "$currentYear-07-31 23:59:59";
+
         return [
             'transactable_type' => $type,
             'transactable_id' => $transactable->id,
             'account_id' => $account->id,
-            'created_at' => $this->faker->date('Y-m-d H:i:s'),
+            'created_at' => $this->faker->dateTimeBetween($startDate, $endDate)->format('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];
     }

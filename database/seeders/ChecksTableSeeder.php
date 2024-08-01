@@ -14,6 +14,6 @@ class ChecksTableSeeder extends Seeder
      */
     public function run()
     {
-        Check::factory()->count(50)->create();
+        Check::factory()->count(200)->create();
     }
 }

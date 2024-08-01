@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +18,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $permissions = [
+            'check-control',
+        ];
+
+        $roles = [
+            'admin',
+            'customer',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::create([
+                'name' => $permission,
+                'guard_name' => 'api'
+            ]);
+        }
+
+        foreach ($roles as $role) {
+            $roleAdmin = Role::create([
+                'name' => $role,
+                'guard_name' => 'api'
+            ]);
+
+            if($role == 'admin'){
+                $roleAdmin->syncPermissions($permissions);
+            }
+        }
+
+
         DB::statement("SET foreign_key_checks=0");
 
         User::truncate();
@@ -26,10 +57,18 @@ class DatabaseSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
 
-        User::factory()->create([
-            'name' => 'Admin User',
+        $admin = User::factory()->create([
+            'username' => 'Admin User',
             'email' => 'admin@admin.com',
+            'password' => bcrypt('password'),
         ]);
+
+        Account::factory()->create([
+            'user_id' => $admin->id,
+            'current_balance' => 0,
+        ]);
+
+        $admin->assignRole('admin');
 
         $this->call([
             AccountTableSeeder::class,

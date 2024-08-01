@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginAPIRequest;
+use App\Services\AccountServicesInterface;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use Carbon\Carbon;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class RegisterAPIController extends Controller
 {
 
+    private AccountServicesInterface $accountService;
     /**
      * Create user
      *
@@ -21,30 +24,36 @@ class RegisterAPIController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
+    public function __construct(AccountServicesInterface $accountService)
+    {
+        $this->accountService = $accountService;
+    }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
+            'username' => 'required',
+            'email' => 'required|email|unique:users',
             'password' => 'required',
-            'c_password' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+
+            return $this->sendError($validator->errors());
         }
 
         $user = new User([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
 
         $user->save();
 
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
+        $user->assignRole('customer');
+
+        return $this->sendResponse($user, 'User saved successfully');
+
     }
 
     /**
@@ -57,14 +66,8 @@ class RegisterAPIController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function login(Request $request)
+    public function login(LoginAPIRequest $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
-        ]);
-
 
 
         $credentials = request(['email', 'password']);
@@ -75,34 +78,37 @@ class RegisterAPIController extends Controller
                 'success' => false
             ], 401);
 
+
         $user = $request->user();
+
+
         $rolesName = $user->getRoleNames();
         $permissions = $user->getPermissionsViaRoles();
         $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
+        $plainTextToken = $tokenResult->plainTextToken;
+        $accessToken = $tokenResult->accessToken;
 
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
 
-        $token->save();
+        $account = $this->accountService->accountByUserId($user->id);
 
-        return response()->json([
-            'result' => [
-                'user_type' => $request->user_type,
-                'avatar' => $user->avatar,
-                'user_name' => $user->name,
-                'user_email' => $user->email,
-                'access_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )->toDateTimeString(),
-                'success' => true,
-                'permissions' => $permissions,
-                'roles' => $rolesName,
+        if ($request->remember_me) {
+            $accessToken->expires_at = Carbon::now()->addWeeks(1);
+            $accessToken->save();
+        }
 
-            ]
-        ]);
+        return $this->sendResponse([
+            'user_type' => $rolesName[0],
+            'username' => $user->username,
+            'email' => $user->email,
+            'access_token' => $plainTextToken,
+            'token_type' => 'Bearer',
+            'account_id' => $account->id,
+            'expires_at' => Carbon::parse(
+                $accessToken->expires_at
+            )->toDateTimeString(),
+            'permissions' => $permissions,
+            'roles' => $rolesName,
+        ], 'User logged in successfully');
     }
 
     /**

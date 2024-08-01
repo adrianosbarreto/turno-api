@@ -27,11 +27,16 @@ class AccountByUserLoggedCriteriaCriteria implements CriteriaInterface
             return $model;
         }
 
-        $account = Account::where('user_id', auth()->user()->id);
+        $account = Account::where('user_id', request()->user()->id)->first();
 
         if($account) {
             return $model->where('account_id', $account->id);
         }
+
+//
+//        if($account) {
+//            return $model->where('account_id', $account->id);
+//        }
 
     }
 }
