@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
 
-class UserDataRepositoryTest extends TestCase
+class AccountRepositoryTest extends TestCase
 {
     use ApiTestTrait, DatabaseTransactions;
 

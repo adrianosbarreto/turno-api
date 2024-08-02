@@ -52,6 +52,14 @@ class RegisterAPIController extends Controller
 
         $user->assignRole('customer');
 
+        $this->accountService->createAccount([
+            'user_id' => $user->id,
+            'type' => 'customer',
+            'current_balance' => 0,
+            'user_name' => $request->username,
+            'account_number' => $this->accountService->createAccountNumber()
+        ]);
+
         return $this->sendResponse($user, 'User saved successfully');
 
     }
@@ -68,7 +76,6 @@ class RegisterAPIController extends Controller
      */
     public function login(LoginAPIRequest $request)
     {
-
 
         $credentials = request(['email', 'password']);
 
@@ -87,7 +94,6 @@ class RegisterAPIController extends Controller
         $tokenResult = $user->createToken('Personal Access Token');
         $plainTextToken = $tokenResult->plainTextToken;
         $accessToken = $tokenResult->accessToken;
-
 
         $account = $this->accountService->accountByUserId($user->id);
 
@@ -118,8 +124,10 @@ class RegisterAPIController extends Controller
      */
     public function logout(Request $request)
     {
-        $token = $request->user()->token();
-        $token->revoke();
+        $token = $request->user()->currentAccessToken();
+
+        $token->delete();
+
         return response()->json([
             'success' => true,
             'message' => 'Successfully logged out'

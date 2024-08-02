@@ -40,13 +40,14 @@ class TransactionAPIController extends Controller
     public function filter(Request $request): JsonResponse
     {
         $request->validate([
+            'account_id' => 'required|integer',
             'type' => 'nullable|in:income,expense',
             'month' => 'nullable|integer',
             'year' => 'nullable|integer'
         ]);
 
         $transactions = $this->transactionService->transactionsByAccountAndTypeOrMonthOrYear(
-            4,
+            $request->account_id,
             $request->type,
             $request->month,
             $request->year

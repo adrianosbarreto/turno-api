@@ -8,7 +8,7 @@ use Tests\TestCase;
 use Tests\ApiTestTrait;
 use App\Models\Account;
 
-class UserDataApiTest extends TestCase
+class AccountApiTest extends TestCase
 {
     use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
 
